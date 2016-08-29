@@ -26,7 +26,7 @@ class SNSToken(models.Model):
 class UserManager(object):
     def __init__(self, user):
         self.redis = get_redis_connection('default')
-        region = sns.connect_to_region(settings.AWS_SES_REGION_NAME, aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        region = sns.connect_to_region(settings.AWS_REGION_NAME, aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                                        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY).region
         self.conn = sns.SNSConnection(region=region, aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                                       aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
