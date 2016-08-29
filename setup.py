@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(
-    name='DjangoSNSRedis',
+    name='django-sns-redis',
     version='0.1dev',
     packages=['snsredis',],
     license='MIT License',
