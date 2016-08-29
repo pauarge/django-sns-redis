@@ -6,4 +6,6 @@ Welcome to Django SNS Redis! This package lets you send push notifications right
 
 ## Requirements
 
+## Setup
+
 ## Contribuitions

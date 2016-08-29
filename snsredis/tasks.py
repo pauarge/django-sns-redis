@@ -20,7 +20,8 @@ def publish(user, message=None, extra=None, sound=None):
     manager = UserManager(user)
     endpoints = manager.get_endpoints()
 
-    region = sns.connect_to_region(settings.AWS_SNS_REGION_NAME).region
+    region = sns.connect_to_region(settings.AWS_SES_REGION_NAME, aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                                   aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY).region
     conn = sns.SNSConnection(aws_access_key_id=settings.AWS_ACCESS_KEY_ID, region=region,
                              aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
 
