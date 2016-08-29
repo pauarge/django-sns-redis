@@ -5,6 +5,9 @@
 Welcome to Django SNS Redis! This package lets you send push notifications right from your [Django](https://www.djangoproject.com) project using [Amazon's](https://aws.amazon.com) [Simple Notification Service](https://aws.amazon.com/sns/). The cool thing about it is that is has a built-in [Redis](http://redis.io) cache for storing devices' ARNs (specially usefull when you have tons of users and don't wanna squeeze your relational database).
 
 ## How it works
+Django SNS Redis allows you to register devices with their registration_id provided by GCM/APNS. Then, it stores it to a database and obtains an ARN from SNS. 
+
+Since that ARN is associated to a user and stored in Redis, when publishing a message, you won't hit the database. That, added to the features SNS provides, will help your app deliver notifications much faster and with less resources.
 
 ## Requirements
 The library might work with versions prior to the ones specified, but they are not tested. Feel free to submit a pull request if you have tested other versions (or if you have patched the library!).
@@ -26,7 +29,6 @@ AWS_REGION_NAME = [region where you have the desired SNS instances]
 
 AWS_SNS_APNS_ARN = [ARN for your iOS app]
 AWS_SNS_GCM_ARN = [ARN for your Android app]
-
 ~~~~
 
 What are we doing there?
@@ -40,6 +42,8 @@ Then we are adding some keys that Amazon will provide you.
 * **REGION NAME** is the region in which you have configured your SNS instances.
 
 * **SNS APNS/GCM ARN** (ARN stands for Amazon Resource Name). IDs of the SNS applications (you can register them [here](https://eu-west-1.console.aws.amazon.com/sns/v2/home)). This parameters are only required for the platforms you want to use.
+
+**Remember to apply migrations!**
 
 ## Usage
 
