@@ -33,7 +33,7 @@ class UserManager(object):
         self.user = user
 
     def get_endpoints(self):
-        return self.redis.smembers('sns-endpoints:{}'.format(self.user.id))
+        return self.redis.lrange('sns-endpoints:{}'.format(self.user.id), 0, -1)
 
     def get_user(self):
         return self.user

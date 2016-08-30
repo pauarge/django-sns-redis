@@ -20,13 +20,12 @@ def publish(user, message=None, extra=None, sound=None):
     manager = UserManager(user)
     endpoints = manager.get_endpoints()
 
-    region = sns.connect_to_region(settings.AWS_REGION_NAME, aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                                   aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY).region
-    conn = sns.SNSConnection(aws_access_key_id=settings.AWS_ACCESS_KEY_ID, region=region,
-                             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
-
     if len(endpoints) > 0:
         formatted_message = format.format_message(message, extra, sound)
+        region = sns.connect_to_region(settings.AWS_REGION_NAME, aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                                       aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY).region
+        conn = sns.SNSConnection(aws_access_key_id=settings.AWS_ACCESS_KEY_ID, region=region,
+                                 aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
         for ep in endpoints:
             try:
                 conn.publish(target_arn=ep, message=formatted_message, message_structure='json')
