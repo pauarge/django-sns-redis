@@ -1,5 +1,5 @@
 from boto import sns
-from django.settings import conf
+from django.conf import settings
 from django_redis import get_redis_connection
 import collections
 import json
@@ -36,7 +36,7 @@ def get_connection_sns():
 
 
 def get_connection_redis():
-    if conf.SNSREDIS_REDIS_CONNECTION:
-        return get_redis_connection(conf.SNSREDIS_REDIS_CONNECTION)
+    if settings.SNSREDIS_REDIS_CONNECTION:
+        return get_redis_connection(settings.SNSREDIS_REDIS_CONNECTION)
     else:
         return get_redis_connection('default')
