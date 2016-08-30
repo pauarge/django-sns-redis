@@ -29,6 +29,8 @@ AWS_REGION_NAME = [region where you have the desired SNS instances]
 
 AWS_SNS_APNS_ARN = [ARN for your iOS app]
 AWS_SNS_GCM_ARN = [ARN for your Android app]
+
+SNSREDIS_REDIS_CONNECTION = 'eu-west-1'
 ~~~~
 
 What are we doing there?
@@ -39,9 +41,11 @@ Then we are adding some keys that Amazon will provide you.
 
 * **ACCESS KEY ID** and **SECRET ACCESS KEY** is a pair of keys that let you use your AWS resources from outside. You can set up them [here](https://console.aws.amazon.com/iam/home). Make sure your keys have permissions to operate SNS.
 
-* **REGION NAME** is the region in which you have configured your SNS instances.
+* **REGION NAME** is the region in which you have configured your SNS instances. *Default: eu-west-1*
 
 * **SNS APNS/GCM ARN** (ARN stands for Amazon Resource Name). IDs of the SNS applications (you can register them [here](https://eu-west-1.console.aws.amazon.com/sns/v2/home)). This parameters are only required for the platforms you want to use.
+
+* **SNSREDIS REDIS CONNECTION**. Name for the Redis connection the library is going to use. Use this parameter only if you are using multiple redis connections. *Default: default*
 
 **Remember to apply migrations!**
 
