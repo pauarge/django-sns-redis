@@ -20,7 +20,7 @@ def publish(user, message=None, extra=None, sound=None, badge=None):
     endpoints = manager.get_endpoints()
 
     if len(endpoints) > 0:
-        formatted_message = format_message(message, extra, sound)
+        formatted_message = format_message(message, extra, sound, badge)
         conn = get_connection_sns()
 
         for ep in endpoints:

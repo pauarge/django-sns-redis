@@ -15,7 +15,10 @@ def format_message(message, extra=None, sound=None, badge=None):
     if sound:
         aps['sound'] = sound
     if badge:
-        aps['badge'] = badge
+        try:
+            aps['badge'] = int(badge)
+        except ValueError:
+            pass
     apns = {
         "aps": aps,
     }
