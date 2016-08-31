@@ -16,4 +16,4 @@ def add_token_to_redis(sender, instance=None, created=False, **kwargs):
 @receiver(post_delete, sender=SNSToken)
 def remove_token_from_redis(sender, instance=None, **kwargs):
     redis = get_connection_redis()
-    redis.lrem('sns-endpoints:{}'.format(instance.user_id), instance.arn)
+    redis.lrem('sns-endpoints:{}'.format(instance.user_id), 0, instance.arn)
