@@ -5,22 +5,29 @@ import collections
 import json
 
 
-def format_message(message, extra=None, sound=None):
+def format_message(message, extra=None, sound=None, badge=None):
     if not isinstance(extra, collections.Mapping):
         extra = {}
 
-    apns = extra
+    aps = {
+        'alert': message
+    }
     if sound:
-        apns['sound'] = sound
-    apns['alert'] = message
+        aps['sound'] = sound
+    if badge:
+        aps['badge'] = badge
+    apns = {
+        "aps": aps,
+    }
+    apns.update(extra)
 
-    gcm = extra
-    gcm['message'] = message
+    gcm = {
+        'message': message
+    }
+    gcm.update(extra)
 
     data = {
-        "APNS": json.dumps({
-            "aps": apns
-        }),
+        "APNS": json.dumps(apns),
         "GCM": json.dumps({
             "data": gcm
         })
@@ -30,9 +37,9 @@ def format_message(message, extra=None, sound=None):
 
 def get_connection_sns():
     region = sns.connect_to_region(settings.AWS_REGION_NAME, aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY).region
+                                   aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY).region
     return sns.SNSConnection(aws_access_key_id=settings.AWS_ACCESS_KEY_ID, region=region,
-                                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+                             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
 
 
 def get_connection_redis():

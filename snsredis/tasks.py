@@ -15,7 +15,7 @@ def remove_token(user, token):
     manager.remove_token(token)
 
 
-def publish(user, message=None, extra=None, sound=None):
+def publish(user, message=None, extra=None, sound=None, badge=None):
     manager = UserManager(user)
     endpoints = manager.get_endpoints()
 
@@ -28,7 +28,8 @@ def publish(user, message=None, extra=None, sound=None):
                 conn.publish(target_arn=ep, message=formatted_message, message_structure='json')
             except BotoServerError as e:
                 if e.error_code == 'EndpointDisabled':
-                    obj = SNSToken.objects.filter(user=user, arn=e)
+                    obj = SNSToken.objects.filter(user=user, arn=ep)
                     obj.delete()
+                    conn.delete_endpoint(ep)
                 else:
                     raise e

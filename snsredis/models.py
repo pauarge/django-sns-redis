@@ -56,7 +56,7 @@ class UserManager(object):
             endpoint_arn = ret.get('CreatePlatformEndpointResponse').get('CreatePlatformEndpointResult').get(
                 'EndpointArn')
             SNSToken.objects.get_or_create(user=self.user, arn=endpoint_arn,
-                                            defaults={'registration_id': token, 'platform': platform})
+                                           defaults={'registration_id': token, 'platform': platform})
 
     def remove_token(self, token):
         if isinstance(token, str) or isinstance(token, unicode):
