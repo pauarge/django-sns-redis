@@ -78,8 +78,9 @@ extra = {
 			'url': 'http://www.example.com'
 		}
 sound = 'default.mp3'
+badge = 24
 
-publish(user, message, extra, sound)
+publish(user, message=message, extra=extra, sound=sound, badge=badge)
 
 ~~~~
 

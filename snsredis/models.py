@@ -22,7 +22,10 @@ class SNSToken(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '{} - {}'.format(self.user, self.platform)
+        try:
+            return '{} - {}'.format(self.user, self.platform)
+        except UnicodeDecodeError:
+            pass
 
     class Meta:
         app_label = 'snsredis'
