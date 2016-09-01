@@ -1,5 +1,3 @@
-from boto import sns
-from boto.exception import BotoClientError, BotoServerError
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models

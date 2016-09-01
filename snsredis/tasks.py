@@ -1,7 +1,8 @@
-from boto.exception import BotoClientError, BotoServerError
+from boto.exception import BotoServerError
 from django.conf import settings
+from django.contrib.auth.models import User
 
-from helpers import format_message, get_connection_sns
+from helpers import format_message, get_connection_sns, get_connection_redis
 from models import SNSToken, UserManager
 
 
@@ -15,13 +16,45 @@ def remove_token(user, token):
     manager.remove_token(token)
 
 
+def prune_tokens(platform):
+    if platform == 'apns':
+        app_arn = settings.AWS_SNS_APNS_ARN
+    elif platform == 'gcm':
+        app_arn = settings.AWS_SNS_GCM_ARN
+    else:
+        return
+    conn = get_connection_sns()
+    res = conn.list_endpoints_by_platform_application(platform_application_arn=app_arn)
+    while res.get('ListEndpointsByPlatformApplicationResponse').get('ListEndpointsByPlatformApplicationResult').get(
+            'NextToken'):
+        endpoints = res.get('ListEndpointsByPlatformApplicationResponse').get(
+            'ListEndpointsByPlatformApplicationResult').get('Endpoints')
+        for ep in endpoints:
+            endpoint_arn = ep.get('EndpointArn')
+            token = ep.get('Attributes').get('Token')
+            if ep.get('Attributes').get('Enabled') == 'true':
+                objs = SNSToken.objects.filter(registration_id=token).exclude(arn=endpoint_arn)
+                for o in objs:
+                    print("FOUND DUPLICATE")
+                    # conn.delete_endpoint(o.arn)
+                    # o.delete()
+            else:
+                print("FOUND DISABLED")
+                conn.delete_endpoint(endpoint_arn)
+                SNSToken.objects.filter(arn=endpoint_arn).delete()
+        res = conn.list_endpoints_by_platform_application(platform_application_arn=app_arn, next_token=res.get(
+            'ListEndpointsByPlatformApplicationResponse').get('ListEndpointsByPlatformApplicationResult').get(
+            'NextToken'))
+
+
 def prune_user_tokens(user):
     tokens = SNSToken.objects.filter(user=user)
     if len(tokens) > 1:
         conn = get_connection_sns()
         registred_ids = []
         for t in tokens:
-            attr = conn.get_endpoint_attributes(t.arn).get('GetEndpointAttributesResponse').get('GetEndpointAttributesResult').get('Attributes')
+            attr = conn.get_endpoint_attributes(t.arn).get('GetEndpointAttributesResponse').get(
+                'GetEndpointAttributesResult').get('Attributes')
             if attr.get('Enabled') == 'true':
                 if attr.get('Token') in registred_ids:
                     print("FOUND DUPLICATED")
@@ -34,6 +67,17 @@ def prune_user_tokens(user):
                 print("FOUND DISABLED")
                 conn.delete_endpoint(t.arn)
                 t.delete()
+
+
+def rebuild_redis():
+    redis = get_connection_redis()
+    users = User.objects.all()
+    for user in users:
+        _hash = 'sns-endpoints:{}'.format(user.id)
+        tokens = SNSToken.objects.filter(user=user)
+        redis.delete(_hash)
+        for t in tokens:
+            redis.lpush(_hash, t.arn)
 
 
 def publish(user, message=None, extra=None, sound=None, badge=None):
