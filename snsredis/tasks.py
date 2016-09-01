@@ -15,6 +15,27 @@ def remove_token(user, token):
     manager.remove_token(token)
 
 
+def prune_user_tokens(user):
+    tokens = SNSToken.objects.filter(user=user)
+    if len(tokens) > 1:
+        conn = get_connection_sns()
+        registred_ids = []
+        for t in tokens:
+            attr = conn.get_endpoint_attributes(t.arn).get('GetEndpointAttributesResponse').get('GetEndpointAttributesResult').get('Attributes')
+            if attr.get('Enabled') == 'true':
+                if attr.get('Token') in registred_ids:
+                    print("FOUND DUPLICATED")
+                    conn.delete_endpoint(t.arn)
+                    t.delete()
+                else:
+                    print("FOUND NEW")
+                    registred_ids.append(attr.get('Token'))
+            else:
+                print("FOUND DISABLED")
+                conn.delete_endpoint(t.arn)
+                t.delete()
+
+
 def publish(user, message=None, extra=None, sound=None, badge=None):
     manager = UserManager(user)
     endpoints = manager.get_endpoints()

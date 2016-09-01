@@ -5,7 +5,8 @@ from models import SNSToken
 
 class SNSTokenAdmin(admin.ModelAdmin):
     list_filter = ['platform']
-    list_display = ('user', 'arn', 'registration_id', 'platform', 'created')
+    list_display = ('user', 'platform', 'created')
+    search_fields = ['user__username']
     raw_id_fields = ['user']
 
 
