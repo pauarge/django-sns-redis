@@ -35,11 +35,9 @@ def prune_tokens(platform):
             if ep.get('Attributes').get('Enabled') == 'true':
                 objs = SNSToken.objects.filter(registration_id=token).exclude(arn=endpoint_arn)
                 for o in objs:
-                    print("FOUND DUPLICATE")
-                    # conn.delete_endpoint(o.arn)
-                    # o.delete()
+                    conn.delete_endpoint(o.arn)
+                    o.delete()
             else:
-                print("FOUND DISABLED")
                 conn.delete_endpoint(endpoint_arn)
                 SNSToken.objects.filter(arn=endpoint_arn).delete()
         res = conn.list_endpoints_by_platform_application(platform_application_arn=app_arn, next_token=res.get(
@@ -57,14 +55,11 @@ def prune_user_tokens(user):
                 'GetEndpointAttributesResult').get('Attributes')
             if attr.get('Enabled') == 'true':
                 if attr.get('Token') in registred_ids:
-                    print("FOUND DUPLICATED")
                     conn.delete_endpoint(t.arn)
                     t.delete()
                 else:
-                    print("FOUND NEW")
                     registred_ids.append(attr.get('Token'))
             else:
-                print("FOUND DISABLED")
                 conn.delete_endpoint(t.arn)
                 t.delete()
 
