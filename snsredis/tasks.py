@@ -27,9 +27,11 @@ def publish(user, message=None, extra=None, sound=None, badge=None):
             try:
                 conn.publish(target_arn=ep, message=formatted_message, message_structure='json')
             except BotoServerError as e:
+                obj = SNSToken.objects.filter(user=user, arn=ep)
                 if e.error_code == 'EndpointDisabled':
-                    obj = SNSToken.objects.filter(user=user, arn=ep)
                     obj.delete()
                     conn.delete_endpoint(ep)
+                elif e.error_code == 'InvalidParameter':
+                    obj.delete()
                 else:
                     raise e
