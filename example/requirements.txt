@@ -1,0 +1,4 @@
+boto==2.42.0
+Django==1.10.1
+django-redis==4.4.4
+redis==2.10.5
