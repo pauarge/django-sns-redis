@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
-from helpers import get_connection_sns, get_connection_redis
+from .helpers import get_connection_sns, get_connection_redis
 
 VALID_PLATFORMS = (
     ('apns', 'APNS'),

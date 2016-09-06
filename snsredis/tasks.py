@@ -2,8 +2,8 @@ from boto.exception import BotoServerError
 from django.conf import settings
 from django.contrib.auth.models import User
 
-from helpers import format_message, get_connection_sns, get_connection_redis
-from models import SNSToken, UserManager
+from .helpers import format_message, get_connection_sns, get_connection_redis
+from .models import SNSToken, UserManager
 
 
 def add_token(user, token, platform):

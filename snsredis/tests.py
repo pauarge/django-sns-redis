@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from models import SNSToken
+from .models import SNSToken
 
 
 class SNSRedisTestCase(TestCase):

@@ -1,8 +1,8 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
-from helpers import get_connection_redis
-from models import SNSToken
+from .helpers import get_connection_redis
+from .models import SNSToken
 
 
 @receiver(post_save, sender=SNSToken)

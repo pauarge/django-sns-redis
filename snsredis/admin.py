@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import SNSToken
+from .models import SNSToken
 
 
 class SNSTokenAdmin(admin.ModelAdmin):
