@@ -2,6 +2,7 @@
 setup.py
 snsredis/__init__.py
 snsredis/admin.py
+snsredis/apps.py
 snsredis/helpers.py
 snsredis/models.py
 snsredis/signals.py
