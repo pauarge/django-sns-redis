@@ -30,7 +30,7 @@ AWS_REGION_NAME = [region where you have the desired SNS instances]
 AWS_SNS_APNS_ARN = [ARN for your iOS app]
 AWS_SNS_GCM_ARN = [ARN for your Android app]
 
-SNSREDIS_REDIS_CONNECTION = 'eu-west-1'
+SNSREDIS_REDIS_CONNECTION = [name of the redis connection]
 ~~~~
 
 What are we doing there?
