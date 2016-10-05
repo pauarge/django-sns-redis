@@ -5,12 +5,13 @@ import collections
 import json
 
 
-def format_message(message, extra=None, sound=None, badge=None):
+def format_message(message, extra=None, sound=None, badge=None, mutable_content=1):
     if not isinstance(extra, collections.Mapping):
         extra = {}
 
     aps = {
-        'alert': message
+        'alert': message,
+        'mutable_content': mutable_content
     }
     if sound:
         aps['sound'] = sound

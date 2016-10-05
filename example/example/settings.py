@@ -119,3 +119,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# SNSRedis setup
+
+AWS_ACCESS_KEY_ID = '[your key id]'
+AWS_SECRET_ACCESS_KEY = '[your secret]'
+AWS_REGION_NAME = 'eu-west-1'
+
+AWS_SNS_APNS_ARN = '[ARN for your iOS app]'
+AWS_SNS_GCM_ARN = '[ARN for your Android app]'
+
+SNSREDIS_REDIS_CONNECTION = 'default'
