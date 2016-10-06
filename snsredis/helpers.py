@@ -11,7 +11,7 @@ def format_message(message, extra=None, sound=None, badge=None, mutable_content=
 
     aps = {
         'alert': message,
-        'mutable_content': mutable_content
+        'mutable-content': mutable_content
     }
     if sound:
         aps['sound'] = sound
