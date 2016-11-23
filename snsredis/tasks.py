@@ -75,12 +75,12 @@ def rebuild_redis():
             redis.lpush(_hash, t.arn)
 
 
-def publish(user, message=None, extra=None, sound=None, badge=None, mutable_content=1):
+def publish(user, message=None, extra=None, sound=None, badge=None, mutable_content=1, apns_category=None):
     manager = UserManager(user)
     endpoints = manager.get_endpoints()
 
     if len(endpoints) > 0:
-        formatted_message = format_message(message, extra, sound, badge, mutable_content)
+        formatted_message = format_message(message, extra, sound, badge, mutable_content, apns=apns_category)
         conn = get_connection_sns()
 
         for ep in endpoints:

@@ -5,7 +5,7 @@ import collections
 import json
 
 
-def format_message(message, extra=None, sound=None, badge=None, mutable_content=1):
+def format_message(message, extra=None, sound=None, badge=None, mutable_content=1, apns_category=None):
     if not isinstance(extra, collections.Mapping):
         extra = {}
 
@@ -13,6 +13,8 @@ def format_message(message, extra=None, sound=None, badge=None, mutable_content=
         'alert': message,
         'mutable-content': mutable_content
     }
+    if apns_category:
+        aps['category'] = apns_category
     if sound:
         aps['sound'] = sound
     if badge:
