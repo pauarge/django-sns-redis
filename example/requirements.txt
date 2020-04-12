@@ -1,5 +1,5 @@
 boto==2.42.0
-Django==1.11.21
+Django==1.11.28
 django-redis==4.4.4
 django-sns-redis==0.1.8
 redis==2.10.5
